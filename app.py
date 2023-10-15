@@ -2,8 +2,6 @@ from flask import Flask, render_template, request, redirect
 import base64
 from io import BytesIO
 from PIL import Image
-import face_recognition
-
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -15,6 +13,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def detect_faces_in_image(file_stream):
+    import face_recognition
     img = face_recognition.load_image_file(file_stream)
     faces = face_recognition.face_locations(img)
     result = []
