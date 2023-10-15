@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 import base64
 from io import BytesIO
 from PIL import Image
@@ -52,7 +52,20 @@ def upload_image():
 
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
-            return detect_faces_in_image(file)
+            imgs = []
+            for item in detect_faces_in_image(file):
+                imgs.append(
+                    '''
+<img src="data:image/png;base64, {}" alt="Red dot" />
+'''.format(item)
+                )
+            return '''
+<div>
+  <p>Faces</p>
+{}
+</div>
+'''.format(" ".join(imgs))
+
 
     # If no valid image file was uploaded, show the file upload form:
     return '''
